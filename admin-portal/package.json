@@ -1,0 +1,10 @@
+{
+  "name": "sien-project-admin-portal",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "node -e \"console.log('SIEN admin portal ready in public directory')\"",
+    "start": "npx serve public"
+  },
+  "devDependencies": {}
+}

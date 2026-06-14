@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#071a14" />
+  <title>SIEN Project Portal | Portfolio Administration</title>
+  <link rel="icon" type="image/png" href="assets/sien-logo.png" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="noise"></div>
+  <div class="orb orb-a"></div>
+  <div class="orb orb-b"></div>
+
+  <main>
+    <section class="auth-shell" id="authView">
+      <div class="auth-art">
+        <div class="brand-lockup">
+          <img src="assets/sien-logo.png" alt="SIEN Group logo" />
+          <span><strong>SIEN</strong><small>Project Portal</small></span>
+        </div>
+        <h1>Upload new landmark projects into the live portfolio.</h1>
+        <p>Securely manage project images, categories, descriptions, status, visibility and portfolio case-study content.</p>
+        <div class="auth-stats">
+          <span><strong>Live</strong>Portfolio sync</span>
+          <span><strong>Cloud</strong>Image storage</span>
+          <span><strong>Secure</strong>Admin access</span>
+        </div>
+      </div>
+      <form class="login-card" id="loginForm">
+        <p class="eyebrow">Restricted access</p>
+        <h2>Sign in to SIEN Admin</h2>
+        <label>Email address<input id="loginEmail" type="email" autocomplete="email" required placeholder="admin@sien.co.ke" /></label>
+        <label>Password<input id="loginPassword" type="password" autocomplete="current-password" required placeholder="Enter password" /></label>
+        <button class="btn btn-primary" type="submit">Login to Portal</button>
+        <p class="setup-hint" id="setupHint">Connect Supabase in <code>supabase-config.js</code> before deployment.</p>
+      </form>
+    </section>
+
+    <section class="portal-shell hidden" id="appView">
+      <aside class="sidebar">
+        <a class="brand-lockup compact" href="#top" aria-label="SIEN portal home">
+          <img src="assets/sien-logo.png" alt="SIEN Group logo" />
+          <span><strong>SIEN</strong><small>Portfolio Admin</small></span>
+        </a>
+        <nav>
+          <a href="#dashboard" class="active">Dashboard</a>
+          <a href="#add-project">Add Project</a>
+          <a href="#project-list">Projects</a>
+          <a href="#help">Setup</a>
+        </nav>
+        <a class="external" id="publicWebsiteLink" href="#" target="_blank" rel="noopener">Open public website</a>
+        <button class="logout" id="logoutBtn">Logout</button>
+      </aside>
+
+      <section class="workspace" id="top">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">SIEN Group</p>
+            <h1>Project Portfolio Control Center</h1>
+          </div>
+          <div class="profile-pill"><span id="userInitial">S</span><small id="userEmail">Signed in</small></div>
+        </header>
+
+        <section class="dashboard" id="dashboard">
+          <article class="stat"><span>Total Projects</span><strong id="statTotal">0</strong><small>All uploaded records</small></article>
+          <article class="stat"><span>Published</span><strong id="statPublished">0</strong><small>Visible on website</small></article>
+          <article class="stat"><span>Drafts</span><strong id="statDrafts">0</strong><small>Hidden until ready</small></article>
+          <article class="stat accent"><span>Categories</span><strong id="statCategories">0</strong><small>Portfolio sectors</small></article>
+        </section>
+
+        <section class="panel" id="add-project">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow">Create / update portfolio case study</p>
+              <h2 id="formTitle">Add New Project</h2>
+            </div>
+            <button class="btn btn-ghost" type="button" id="resetFormBtn">Clear Form</button>
+          </div>
+
+          <form id="projectForm" class="project-form">
+            <input type="hidden" id="projectId" />
+            <div class="form-grid">
+              <label>Project title<input id="title" required placeholder="e.g. Karen Luxury Villas" /></label>
+              <label>Category<select id="category" required>
+                <option>Residential</option><option>Hospitality</option><option>Healthcare</option><option>Commercial</option><option>Industrial</option><option>Educational</option><option>Sports</option><option>Master Planning</option><option>Mixed Use</option>
+              </select></label>
+              <label>Status<select id="status" required>
+                <option>Design Phase</option><option>Construction Ongoing</option><option>Completed</option><option>Concept Stage</option><option>Master Planning</option>
+              </select></label>
+              <label>Location<input id="location" placeholder="Nairobi, Kenya" /></label>
+              <label>Year / project type<input id="year" placeholder="2026 / Private Residence" /></label>
+              <label>Project size<input id="size" placeholder="2-acre estate / 49,000 sqm / 1200 rooms" /></label>
+            </div>
+            <label>Short description<textarea id="description" rows="4" required placeholder="A concise client-facing description of the project..."></textarea></label>
+            <label>Scope of work<textarea id="scope" rows="4" placeholder="Architecture, engineering, approvals, interiors, landscaping, site supervision..."></textarea></label>
+            <label>Highlights <small>One highlight per line</small><textarea id="highlights" rows="4" placeholder="Passive cooling strategy&#10;Slope-responsive planning&#10;Integrated landscape design"></textarea></label>
+
+            <div class="media-grid">
+              <div class="upload-card">
+                <label class="file-label">Main image<input type="file" id="mainImage" accept="image/*" /></label>
+                <p>Used as the project card cover image.</p>
+                <div class="preview" id="mainPreview"></div>
+              </div>
+              <div class="upload-card">
+                <label class="file-label">Gallery images<input type="file" id="galleryImages" accept="image/*" multiple /></label>
+                <p>Optional gallery for the project detail modal.</p>
+                <div class="preview grid" id="galleryPreview"></div>
+              </div>
+            </div>
+
+            <div class="publish-row">
+              <label class="toggle"><input id="isFeatured" type="checkbox" /> <span>Feature this project</span></label>
+              <label class="toggle"><input id="isPublished" type="checkbox" checked /> <span>Publish on public website</span></label>
+              <button class="btn btn-primary" id="saveProjectBtn" type="submit">Save Project</button>
+            </div>
+          </form>
+        </section>
+
+        <section class="panel" id="project-list">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow">Uploaded portfolio records</p>
+              <h2>Project Library</h2>
+            </div>
+            <button class="btn btn-ghost" type="button" id="refreshBtn">Refresh</button>
+          </div>
+          <div class="project-list" id="projectList"></div>
+        </section>
+
+        <section class="panel setup" id="help">
+          <p class="eyebrow">Important setup</p>
+          <h2>How this portal updates the public website</h2>
+          <ol>
+            <li>Create the Supabase database using the included <code>supabase/schema.sql</code>.</li>
+            <li>Create an admin user in Supabase Authentication.</li>
+            <li>Add the same Supabase URL and anon key into both portal and public website <code>supabase-config.js</code> files.</li>
+            <li>Deploy this admin portal on Vercel, then deploy the public SIEN website folder separately.</li>
+            <li>When a project is saved with <strong>Publish</strong> enabled, it appears in the public website portfolio automatically.</li>
+          </ol>
+        </section>
+      </section>
+    </section>
+  </main>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
